@@ -8,6 +8,9 @@ blockchain=[genesis_block]
 open_transactions=[]
 owner='Max'
 
+def hash_block(block):
+    return '-'.join([str(block[key]) for key in block])
+
 #Function for last_transaction
 def lst_transaction():
      if len(blockchain) < 1:
@@ -22,8 +25,7 @@ def add_transaction(recipient,sender=owner,amount=1.0):
     
 def mine_block():
     last_block=blockchain[-1]
-    hashed_block='-'.join([str(last_block[key]) for key in last_block])
-    print(hashed_block)
+    hashed_block=hash_block(last_block)
         
     block={
         'previous_hash':'xyz',
@@ -49,29 +51,14 @@ def print_blockchain_element():
 
 #Function for checking the blockchain
 def verify_chain():
-    # block_index = 0
-    is_valid = True
-    for block_index in range(len(blockchain)):
-        if block_index == 0:
-              block_index += 1
-              continue
-        elif blockchain[block_index][0] == blockchain[block_index-1]:
-             is_valid = True
-        else:
-            is_valid = False
-            break
-
-    # for block in blockchain:
-    #     if block_index == 0:
-    #         block_index += 1
-    #         continue
-    #     elif block[0] == blockchain[block_index - 1]:
-    #         is_valid = True
-    #     else:
-    #         is_valid = False
-    #         break
-    #     block_index +=1
-    return is_valid
+    """verify the current blockchain and return true if it is valid else false"""
+    for(index,block) in enumerate(blockchain):
+        if index==0:
+            continue
+        if block['previous_hash']!=hash_block(blockchain[index-1]):
+            return False
+        return True
+   
 
 waiting_for_input = True
 
@@ -97,12 +84,16 @@ while waiting_for_input:
         waiting_for_input = False
     elif user_choice =='H':
         if len(blockchain) >=1:
-            blockchain[0] = [2]
+            blockchain[0] = {
+                'previous_hash':'',
+                'index':0,
+                'transaction':[{'sender':'Chris','recipient':'Max','amount':100.0}]
+}
     else:
         print('INPUT INVALID!!!,ENTER THE VALID OPTION')
-    #if not verify_chain():
-       #print_blockchain_element()
-       #print('Invalid Blockchain!!!')
-       #break
+    if verify_chain():
+       print_blockchain_element()
+       print('Invalid Blockchain!!!')
+       break
 
-print('Done!')  
+print('Done!')
