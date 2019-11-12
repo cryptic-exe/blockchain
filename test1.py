@@ -1,5 +1,7 @@
 #Starting of blockchain
 blockchain=[]
+open_transactions=[]
+owner='Max'
 
 #Function for last_transaction
 def lst_transaction():
@@ -7,13 +9,19 @@ def lst_transaction():
         return None
      return blockchain[-1]
 #Function for last_transaction
-def add_transaction(transaction_amount,last_transaction=[1]):
-    if last_transaction == None:
-        last_transaction = [1]
-    blockchain.append([last_transaction,transaction_amount])
+def add_transaction(recipient,sender=owner,amount=1.0):
+    transaction={'sender':sender,
+                 'recipient':recipient,
+                 'amount':amount}
+    open_transactions.append(transaction)
+    
+def mine_block():
+    pass
 
 def get_transaction_value():
-    return float(input("enter the transaction amount "))
+    txt_recipient=input('enter the recipient of the transaction')
+    txt_amount= float(input("enter the transaction amount "))
+    return txt_recipient,txt_amount
 
 def get_user_choice():
     return input('your choice ')
@@ -62,8 +70,10 @@ while waiting_for_input:
     user_choice=get_user_choice()
     
     if user_choice=='1':
-        txt_amount=get_transaction_value()
-        add_transaction(txt_amount,lst_transaction())
+        txt_data=get_transaction_value()
+        recipient,amount=txt_data
+        add_transaction(recipient,amount=amount)
+        print(open_transactions)
     elif user_choice =='2':
         print_blockchain_element()
     elif user_choice =='Q':
