@@ -1,5 +1,10 @@
 #Starting of blockchain
-blockchain=[]
+genesis_block={
+    'previous_hash':'',
+        'index':0,
+        'transaction':[]
+}
+blockchain=[genesis_block]
 open_transactions=[]
 owner='Max'
 
@@ -16,7 +21,16 @@ def add_transaction(recipient,sender=owner,amount=1.0):
     open_transactions.append(transaction)
     
 def mine_block():
-    pass
+    last_block=blockchain[-1]
+    hashed_block='-'.join([str(last_block[key]) for key in last_block])
+    print(hashed_block)
+        
+    block={
+        'previous_hash':'xyz',
+        'index':len(blockchain),
+        'transaction':open_transactions
+          }
+    blockchain.append(block)
 
 def get_transaction_value():
     txt_recipient=input('enter the recipient of the transaction')
@@ -64,7 +78,8 @@ waiting_for_input = True
 while waiting_for_input:
     print('please choice')
     print('1:Add new transaction')
-    print('2:Output the blockchain block')
+    print('2:Mine a new block')
+    print('3:Output the blockchain block')
     print('H:Manipulate the last transaction')
     print('Q:Quit')
     user_choice=get_user_choice()
@@ -74,7 +89,9 @@ while waiting_for_input:
         recipient,amount=txt_data
         add_transaction(recipient,amount=amount)
         print(open_transactions)
-    elif user_choice =='2':
+    elif user_choice=='2':
+        mine_block()
+    elif user_choice =='3':
         print_blockchain_element()
     elif user_choice =='Q':
         waiting_for_input = False
@@ -83,9 +100,9 @@ while waiting_for_input:
             blockchain[0] = [2]
     else:
         print('INPUT INVALID!!!,ENTER THE VALID OPTION')
-    if not verify_chain():
-        print_blockchain_element()
-        print('Invalid Blockchain!!!')
-        break
+    #if not verify_chain():
+       #print_blockchain_element()
+       #print('Invalid Blockchain!!!')
+       #break
 
-print('Done!')
+print('Done!')  
